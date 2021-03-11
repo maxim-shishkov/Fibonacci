@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package apiGRPC;
+
+service GetFibonacci{
+  rpc Get(FibonacciRequest) returns (FibonacciResponse) {}
+}
+
+message FibonacciRequest {
+  int32 x = 1;
+  int32 y = 2;
+}
+
+message FibonacciResponse {
+    map<int32, int32> Result = 1;
+}
+
+
