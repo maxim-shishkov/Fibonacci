@@ -3,6 +3,7 @@ package apiGRPC
 import (
 	f "Fibonacci/src"
 	"context"
+	"fmt"
 	"google.golang.org/grpc"
 	"log"
 	"net"
@@ -11,10 +12,16 @@ import (
 type GRPCServer struct{}
 
 func (c *GRPCServer) Get(cnx context.Context, req *FibonacciRequest) (*FibonacciResponse, error) {
-	x := int(req.GetX())
-	y := int(req.GetY())
+	x := fmt.Sprint( req.GetX() )
+	y := fmt.Sprint( req.GetY() )
 
-	m := f.GetFibonacci(x, y)
+	m,err := f.GetFibonacci(x, y)
+
+	if err != nil {
+		log.Println(err)
+		return nil, err
+	}
+
 	return &FibonacciResponse{Result: m}, nil
 }
 

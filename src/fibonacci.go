@@ -1,7 +1,34 @@
 package src
 
+import (
+	"errors"
+	"strconv"
+)
 
-func GetFibonacci(start,end int) ( map[int32]int32 ) {
+func GetFibonacci(x,y string) (map[int32]int32, error) {
+
+	start, err := strconv.Atoi(x)
+	if err != nil {
+		return nil, err
+	}
+
+	end, err := strconv.Atoi(y)
+	if err != nil {
+		return nil, err
+	}
+
+	if start >= end {
+		return nil, errors.New("Invalid input  x >= y")
+	}
+
+	if end < 0 {
+		return nil, errors.New("Invalid input  y < 0")
+	}
+
+	if start < 0 {
+		return nil, errors.New("Invalid input  x < 0")
+	}
+
 
 
 	f := make([]int32, end + 1)
@@ -14,10 +41,10 @@ func GetFibonacci(start,end int) ( map[int32]int32 ) {
 	}
 
 	// обрезаем до нужной длинны и упаковываем
-	m := make(map[int32]int32, end - start)
+	result := make(map[int32]int32, end - start)
 	for i, u := range f[start:end] {
-		m[int32(i+start)] = u
+		result[int32(i+start)] = u
 	}
 
-	return m
+	return result, nil
 }

@@ -3,16 +3,14 @@ package apiREST
 import (
 	f "Fibonacci/src"
 	"encoding/json"
-	"fmt"
 	"github.com/gorilla/mux"
 	"log"
 	"net/http"
-	"strconv"
 )
 
 func WebServer() {
 	r := mux.NewRouter()
-	r.HandleFunc("/src/", HandlGet).Methods("GET").
+	r.HandleFunc("/fib/", HandleGet).Methods("GET").
 		Queries("x", "{x}").
 		Queries("y", "{y}")
 
@@ -21,27 +19,17 @@ func WebServer() {
 
 }
 
-func HandlGet(w http.ResponseWriter, r *http.Request) {
+func HandleGet(w http.ResponseWriter, r *http.Request) {
 
 	params := mux.Vars(r)
+	x := params["x"]
+	y := params["y"]
 
-	x, err := strconv.Atoi(params["x"])
+
+	fibonacci,err := f.GetFibonacci(x, y)
 	if err != nil {
-		fmt.Fprintf(w, "Invalid input X")
-		return
+		json.NewEncoder(w).Encode(err.Error())
+	} else {
+		json.NewEncoder(w).Encode(fibonacci)
 	}
-
-	y, err := strconv.Atoi(params["y"])
-	if err != nil {
-		fmt.Fprintf(w, "Invalid input Y")
-		return
-	}
-
-	if x >= y {
-		fmt.Fprintf(w, "Invalid input  x >= y")
-		return
-	}
-
-	fibonacci := f.GetFibonacci(x, y)
-	json.NewEncoder(w).Encode(fibonacci)
 }

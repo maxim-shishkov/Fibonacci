@@ -15,4 +15,7 @@ message FibonacciResponse {
     map<int32, int32> Result = 1;
 }
 
+message FibonacciResponseError {
+  string Result = 1;
+}
 
